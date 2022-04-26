@@ -1,0 +1,9 @@
+Para correr este código es necesario tener en una carpeta los archivos
+necesarios para la ejecución del mismo, los cuales son el archivo DFA.cpp,
+DFA.h y el archivo de texto de prueba que en este caso es el de test.txt que
+viene por predeterminado, si se desea evaluar con una prueba diferente, se tendrá
+que ubicar el archivo txt en la carpeta donde se encuentran los demás archivos y
+nombrar a este test.txt, o en su caso cambiar el contenido del archivo test.txt
+existente; el programa fue programado en el lenguaje de programación C++, y para que
+el programa se pueda ejecutar se necesita que el editor de texto tenga el runner
+para ejecutar este lenguaje en la terminal.
