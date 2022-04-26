@@ -13,6 +13,78 @@ José Andrés Lozano Alanís A01284569
 #include "DFA.h"
 using namespace std;
 
+bool B(DFA linea){
+    if (linea.tipo == "Variable"){
+        return true;
+    }else {
+        return false;
+    }    
+}
+
+bool C(DFA linea){
+    if (linea.tipo == "Asignación"){
+        return true;
+    }else {
+        return false;
+    }   
+}
+
+bool D(DFA linea){
+    if (linea.tipo == "Punto y coma"){
+        return true;
+    }else {
+        return false;
+    }   
+}
+
+bool E(DFA linea){
+    if (linea.tipo == "Comentario"){
+        return true;
+    }else {
+        return false;
+    }  
+}
+
+bool F(DFA linea){
+    if (linea.tipo == "Entero"){
+        return true;
+    }else {
+        return false;
+    }  
+}
+
+bool G(DFA linea){
+    if (linea.tipo == "Real"){
+        return true;
+    }else {
+        return false;
+    }  
+}
+
+bool H(DFA linea){
+    if (linea.tipo == "Suma" | linea.tipo == "Multiplicación"| linea.tipo == "Resta"| linea.tipo == "División"| linea.tipo == "Asignación"| linea.tipo == "Potencia"){
+        return true;
+    }else {
+        return false;
+    }  
+}
+
+bool I(DFA linea){
+    if (linea.tipo == "Paréntesis que abre"){
+        return true;
+    }else {
+        return false;
+    }
+}
+
+bool J(DFA linea){
+    if (linea.tipo == "Paréntesis que cierra"){
+        return true;
+    }else {
+        return false;
+    }
+}
+
 int main()
 {
     vector<DFA> dfa;
@@ -163,11 +235,12 @@ int main()
     // F -> Entero
     // G -> Real
     // H -> + | - | / | * | ^ 
+    // I -> Parentésis que abre
+    // J -> Parentésis que cierra
     // A -> F | F H A
     // A -> G | G H A
     // A -> B | B H A
-    // A -> (A) | (A) H A
-
+    // A -> I A J | I A J H A
     
     return 0;
 }

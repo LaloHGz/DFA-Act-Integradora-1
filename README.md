@@ -24,13 +24,17 @@
 
 > H -> + | - | / | * | ^ 
 
+> I -> Parentésis que abre
+
+> J -> Parentésis que cierra
+
 > A -> F | F H A
 
 > A -> G | G H A
 
 > A -> B | B H A
 
-> A -> (A) | (A) H A
+> A -> I A J | I A J H A
 
 
 ## Pasos para ejecutar el código
