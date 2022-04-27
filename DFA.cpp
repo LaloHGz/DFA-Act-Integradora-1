@@ -315,6 +315,7 @@ int main()
     int matrizGuardado[countLine][2]; // matriz de cantidad de lineas a revisar por el indice inicial y final de la linea
 
 
+    // Guardar el inicio y fin de cada línea del test
     int aux = 0, bandera = 0;
     for (int i = 0; i < dfa.size(); i++) {
         if(bandera == 0){
@@ -331,17 +332,6 @@ int main()
             bandera = 0;
         }
     }
-
-    for (int i = 0; i < countLine; i++){
-        
-        cout<<i<<"_start. "<<matrizGuardado[i][0]<<endl;
-        cout<<i<<"_end. "<<matrizGuardado[i][1]<<endl;
-    }
-
-    for (int i = 0; i < dfa.size(); i++)
-    {
-        cout<<i<<". "<<dfa[i].print()<<endl;
-    }
     
 
     for (int i = 0; i < countLine; i++){
@@ -349,7 +339,7 @@ int main()
     }
 
     for (int i = 0; i < countLine; i++){
-        cout<<validacion[i]<<endl;
+        cout<<i<<". "<<validacion[i]<<endl;
     }
     
 
