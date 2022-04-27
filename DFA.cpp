@@ -11,6 +11,9 @@ José Andrés Lozano Alanís A01284569
 #include <vector>
 #include <cstring>
 #include "DFA.h"
+#define CATCH_CONFIG_MAIN
+#include "catch.hpp"
+
 using namespace std;
 
 vector<DFA> dfa;
