@@ -103,7 +103,7 @@ bool A(vector<DFA> dfa, int index){
     }else if(G(dfa,index) == true){ //Real
         validation = true;
         index++;
-        if (H(dfa,index) == true){ //Operadores
+        if (H(dfa,index) == true ){ //Operadores
             validation = true;
             index++;
             return A(dfa, index);
@@ -332,15 +332,15 @@ int main()
         }
     }
 
-    // for (int i = 0; i < countLine; i++){
+    for (int i = 0; i < countLine; i++){
         
-    //     cout<<i<<"_start. "<<matrizGuardado[i][0]<<endl;
-    //     cout<<i<<"_end. "<<matrizGuardado[i][1]<<endl;
-    // }
+        cout<<i<<"_start. "<<matrizGuardado[i][0]<<endl;
+        cout<<i<<"_end. "<<matrizGuardado[i][1]<<endl;
+    }
 
     for (int i = 0; i < dfa.size(); i++)
     {
-        cout<<dfa[i].print()<<endl;
+        cout<<i<<". "<<dfa[i].print()<<endl;
     }
     
 
