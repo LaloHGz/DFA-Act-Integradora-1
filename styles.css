@@ -1,0 +1,44 @@
+body {
+    background-color: rgb(0, 0, 0);
+}
+
+span{
+    font-size: 2rem;
+}
+
+.variable {
+    color: rgb(59, 59, 255);
+}
+
+.asignacion {
+    color: rgb(255, 124, 80);
+}
+
+.puntuacion {
+    color: rgb(104, 255, 104);
+}
+
+.comentario {
+    color: rgb(108, 99, 108);
+}
+
+.entero {
+    color: rgb(255, 255, 104);
+}
+
+.real {
+    color: rgb(110, 255, 255);
+}
+
+.operador {
+    color: rgb(255, 127, 255);
+}
+
+.parentesis {
+    color: rgb(204, 39, 39);
+}
+
+.wrong {
+    background-color: rgb(255, 0, 0);
+    color: rgb(221, 221, 221);
+}

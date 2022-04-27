@@ -1,6 +1,8 @@
 b = 7 ;
 a = 32.4 * ( -8.6 - b ) / 6.1E-8 ;
+xd * 88 / a ;
 d = a ^ b ; // Esto es un comentario
+sudo = ( ( 8 - a ) * -32.3 ) * ( a - b ) ; //Prueba comentario
 c_abc = 8 / 4 * ( -5.6 * 2 + ( 8 ) ) ; //comentario prueba.
 a = ( ) ;
-a * j 
+a * j ;
