@@ -13,92 +13,183 @@ José Andrés Lozano Alanís A01284569
 #include "DFA.h"
 using namespace std;
 
-bool B(DFA linea){
-    if (linea.tipo == "Variable"){
+vector<DFA> dfa;
+
+bool B(vector<DFA> dfa, int index){
+    if (dfa[index].tipo == "Variable"){
         return true;
     }else {
         return false;
     }    
 }
 
-bool C(DFA linea){
-    if (linea.tipo == "Asignación"){
+bool C(vector<DFA> dfa, int index){
+    if (dfa[index].tipo == "Asignación"){
         return true;
     }else {
         return false;
     }   
 }
 
-bool D(DFA linea){
-    if (linea.tipo == "Punto y coma"){
+bool D(vector<DFA> dfa, int index){
+    if (dfa[index].tipo == "Punto y coma"){
         return true;
     }else {
         return false;
     }   
 }
 
-bool E(DFA linea){
-    if (linea.tipo == "Comentario"){
+bool E(vector<DFA> dfa, int index){
+    if (dfa[index].tipo == "Comentario"){
         return true;
     }else {
         return false;
     }  
 }
 
-bool F(DFA linea){
-    if (linea.tipo == "Entero"){
+bool F(vector<DFA> dfa, int index){
+    if (dfa[index].tipo == "Entero"){
         return true;
     }else {
         return false;
     }  
 }
 
-bool G(DFA linea){
-    if (linea.tipo == "Real"){
+bool G(vector<DFA> dfa, int index){
+    if (dfa[index].tipo == "Real"){
         return true;
     }else {
         return false;
     }  
 }
 
-bool H(DFA linea){
-    if (linea.tipo == "Suma" | linea.tipo == "Multiplicación"| linea.tipo == "Resta"| linea.tipo == "División"| linea.tipo == "Asignación"| linea.tipo == "Potencia"){
+bool H(vector<DFA> dfa, int index){
+    if (dfa[index].tipo == "Suma" | dfa[index].tipo == "Multiplicación"| dfa[index].tipo == "Resta"| dfa[index].tipo == "División"| dfa[index].tipo == "Potencia"){
         return true;
     }else {
         return false;
     }  
 }
 
-bool I(DFA linea){
-    if (linea.tipo == "Paréntesis que abre"){
+bool I(vector<DFA> dfa, int index){
+    if (dfa[index].tipo == "Parentesis que abre"){
         return true;
     }else {
         return false;
     }
 }
 
-bool J(DFA linea){
-    if (linea.tipo == "Paréntesis que cierra"){
+bool J(vector<DFA> dfa, int index){
+    if (dfa[index].tipo == "Parentesis que cierra"){
         return true;
     }else {
+        return false;
+    }
+}
+
+bool A(vector<DFA> dfa, int index){
+    bool validation = false;
+    // A -> F | F H A
+    if (F(dfa,index) == true){ //Enteros
+        validation = true;
+        index++;
+        if (H(dfa,index) == true){ //Operadores
+            validation = true;
+            index++;
+            return A(dfa, index);
+        }
+        return validation;
+        // A -> G | G H A
+    }else if(G(dfa,index) == true){ //Real
+        validation = true;
+        index++;
+        if (H(dfa,index) == true){ //Operadores
+            validation = true;
+            index++;
+            return A(dfa, index);
+        }
+        return validation;
+        // A -> B | B H A
+    }else if(B(dfa,index) == true){ //Variable
+        validation = true;
+        index++;
+        if (H(dfa,index) == true){ //Operadores
+            validation = true;
+            index++;
+            return A(dfa, index);
+        }
+        return validation;
+        // A -> I A J | I A J H A
+    }else if(I(dfa,index) == true){ // paréntesis que abre
+        validation = true;
+        index++;
+        validation = A(dfa, index);
+        if (validation == false){
+            return validation;
+        }
+        index++;
+        for (int i = index; i < dfa.size(); i++){
+            if (J(dfa,i) == true){
+                index = i;
+                break;
+            }
+        }
+        validation = J(dfa, index); // paréntesis que cierra
+        if (validation == false){
+            return validation;
+        }
+        index++;
+        if (H(dfa,index) == true){ //Operadores
+            validation = true;
+            index++;
+            return A(dfa, index);
+        }
+        return validation;
+    }
+    return validation;
+}
+
+bool S(vector<DFA> dfa, int index, int end){
+    bool validation = true;
+    validation = B(dfa, index); // Variable
+    if (validation == false){
+        return false;
+    }
+    index++;
+    validation = C(dfa, index); // Asignación
+    if (validation == false){
+        return false;
+    }
+    index++;
+    validation = A(dfa,index); // F | F H A // G | G H A  // B | B H A  // I A J | I A J H A
+    if (validation == false){
+        return false;
+    }
+    if (E(dfa,end) == true){ // Comentario
+        if (D(dfa,end-1) == true){ // Punto y coma
+            return true;
+        }else{
+            return false;
+        }
+    }else if (D(dfa,end) == true){ // Punto y coma
+        return true;
+    }else{
         return false;
     }
 }
 
 int main()
 {
-    vector<DFA> dfa;
     ifstream fileIn("test.txt");
     string line;
-    string word;
     string token = "", tipo = "";
-    int count = 0;
+    int count = 0, countLine = 0;
+
     // Recorremos las lineas del archivo test.txt
     while (getline(fileIn,line)) { 
         // Guardamos los datos del archivo en su respectiva variable de acuerdo al orden
-
+        countLine++;
         int len = line.length();
-
         char char_array[len + 1];
     
         strcpy(char_array, line.c_str());
@@ -209,23 +300,58 @@ int main()
                 tipo = "Variable";
             }else if (char_array[i] == '('){
                 token = "(";
-                tipo = "Paréntesis que abre";
+                tipo = "Parentesis que abre";
             }else if (char_array[i] == ')'){
                 token = ")";
-                tipo = "Paréntesis que cierra";
+                tipo = "Parentesis que cierra";
             }
         }
-
-    }
-
-    //Imprimimos el vector
-    for (int i = 0; i < dfa.size(); i++) {
-        cout<<dfa[i].print()<<endl;
     }
 
 
     // Actividad Integradora 1
     // Utilizamos la salida del analizador lexico (dfa) para generar la entrada para el analizador sintactico
+    bool validacion[countLine];
+    int matrizGuardado[countLine][2]; // matriz de cantidad de lineas a revisar por el indice inicial y final de la linea
+
+
+    int aux = 0, bandera = 0;
+    for (int i = 0; i < dfa.size(); i++) {
+        if(bandera == 0){
+            matrizGuardado[aux][0] = i;
+            bandera = 1;
+        }
+        if (dfa[i].tipo == "Comentario"){
+            matrizGuardado[aux][1] = i;
+            aux++;
+            bandera = 0;
+        }else if(dfa[i].tipo == "Punto y coma" && dfa[i+1].tipo != "Comentario"){
+            matrizGuardado[aux][1] = i;
+            aux++;
+            bandera = 0;
+        }
+    }
+
+    // for (int i = 0; i < countLine; i++){
+        
+    //     cout<<i<<"_start. "<<matrizGuardado[i][0]<<endl;
+    //     cout<<i<<"_end. "<<matrizGuardado[i][1]<<endl;
+    // }
+
+    for (int i = 0; i < dfa.size(); i++)
+    {
+        cout<<dfa[i].print()<<endl;
+    }
+    
+
+    for (int i = 0; i < countLine; i++){
+        validacion[i] = S(dfa,matrizGuardado[i][0], matrizGuardado[i][1]);
+    }
+
+    for (int i = 0; i < countLine; i++){
+        cout<<validacion[i]<<endl;
+    }
+    
 
     // S -> B C A D  | B C A D E
     // B -> Variable
@@ -244,3 +370,4 @@ int main()
     
     return 0;
 }
+
