@@ -244,7 +244,7 @@ bool S(vector<DFA> dfa, int index, int end)
 
 int main()
 {
-    string archivo = "tes|t.txt";
+    string archivo = "test.txt";
     ifstream fileIn(archivo);
     string line;
     string token = "", tipo = "";
