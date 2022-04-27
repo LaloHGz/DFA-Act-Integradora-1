@@ -244,7 +244,7 @@ bool S(vector<DFA> dfa, int index, int end)
 
 int main()
 {
-    string archivo = "test.txt";
+    string archivo = "tes|t.txt";
     ifstream fileIn(archivo);
     string line;
     string token = "", tipo = "";
@@ -524,11 +524,6 @@ int main()
     file << "</html>\n";
 
     file.close();
-
-    // dfa   index end    clases styles   validacion[]
-
-    //     </body>
-    // </html>
 
     // S -> B C A D  | B C A D E
     // B -> Variable
