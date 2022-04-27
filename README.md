@@ -38,4 +38,12 @@
 
 
 ## Pasos para ejecutar el código
-
+El proceso para ejecutar el codigo de manera correcta es primeramente 
+tener todos los archivos necesarios para el correcto funcionamiento, los cuales son nuestro main "DFA.cpp"
+y nuestra estructura DFA.h para nuestros casos de prueba utilizaremos "test.txt" en caso de que se queiran probar
+mas casos de prueba se deberan anadir a este txt y correr el codigo, otros documentos necesarios son
+nuestro styles.css, index.html, que abriran la pagina donde ya se veran resaltados en distintos colores nuestras pruebas
+marcando de color rojo las incorrectas y de disitinto colores segun el tipo de dato las correctas,
+para nuestras pruebas unitarias es necesario "unittesting.cpp" y "catch.hpp" para nuestras pruebas unitarias
+definimos nuestras funciones a probar les pasamos distintos parametros correspondientes a los datos que utilizamos,
+pedimos que nos devuelvan true en caso de que sea correcto y false por el contrario.
