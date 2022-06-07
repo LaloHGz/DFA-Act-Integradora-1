@@ -10,6 +10,10 @@ José Andrés Lozano Alanís A01284569
 #include <sstream>
 #include <vector>
 #include <cstring>
+#include <filesystem>
+#include <ctime>
+#include <sys/time.h>
+#include <thread>
 #include "DFA.h"
 
 using namespace std;
@@ -243,9 +247,10 @@ bool S(vector<DFA> dfa, int index, int end)
     }
 }
 
-int main()
-{
-    string archivo = "test.txt";
+
+
+void syntaxHighligther(string archive, string number){
+    string archivo = archive;
     ifstream fileIn(archivo);
     string line;
     string token = "", tipo = "";
@@ -456,16 +461,14 @@ int main()
     }
 
     ofstream file;
-    file.open("/Users/lalohgz/Documents/DFA/index.html");
-    file << "<!DOCTYPE html>\n";
-    file << "<html lang=\"es\">\n<head>";
-    file << "<meta charset=\"UTF-8\">\n";
-    file << "<title>Document</title>\n";
-    file << "<link rel=\"stylesheet\" href=\"styles.css\">\n";
-    file << "</head>\n";
-    file << "<body>\n";
-    // switch
-    //
+    file.open("results/archive"+number+".html");
+    file<< "<!DOCTYPE html>\n";
+    file<< "<html lang=\"es\">\n<head>";
+    file<< "<meta charset=\"UTF-8\">\n";
+    file<< "<title>Document</title>\n";
+    file<< "<link rel=\"stylesheet\" href=\"styles.css\">\n";
+    file<< "</head>\n";
+    file<< "<body>\n";
 
     for (int i = 0; i < countLine; i++)
     {
@@ -540,6 +543,67 @@ int main()
     // A -> G | G H A
     // A -> B | B H A
     // A -> I A J | I A J H A
+}
+
+namespace fs = std::filesystem;
+
+void startTime(struct timeval &begin)
+{
+  gettimeofday(&begin, 0);
+}
+
+void getTime(struct timeval begin, struct timeval end)
+{
+  long seconds, microseconds;
+  double elapsed;
+  gettimeofday(&end, 0);
+  seconds = end.tv_sec - begin.tv_sec;
+  microseconds = end.tv_usec - begin.tv_usec;
+  elapsed = seconds + microseconds * 1e-6;
+  printf("Tiempo de ejecucion: %.8f seconds.\n", elapsed);
+}
+
+int main()
+{
+    string path = "tests";
+    int number = 1;
+
+    // Tiempo inicial
+    struct timeval begin, end;
+    gettimeofday(&begin, 0);
+
+    // Secuencial
+    for (const auto & entry : fs::directory_iterator(path)){
+        if (!entry.is_directory())
+        {
+            syntaxHighligther(entry.path(), to_string(number));
+            number++;
+        } 
+    }
+
+    // Tiempo final
+    gettimeofday(&end, 0);
+    getTime(begin, end);
+
+
+
+    // Tiempo inicial
+    struct timeval begin2, end2;
+    gettimeofday(&begin2, 0);
+    number = 0;
+    // Paralelo
+    for (const auto & entry : fs::directory_iterator(path)){
+        if (!entry.is_directory())
+        {
+            thread t1(syntaxHighligther,entry.path(), to_string(number));
+            t1.join();
+            number++;
+        } 
+    }
+
+    // Tiempo final
+    gettimeofday(&end2, 0);
+    getTime(begin2, end2);
 
     return 0;
 }
