@@ -591,7 +591,10 @@ void parallel(string path){
 
 int main()
 {
-    string path = "/Users/lalohgz/Downloads/ejemplo";
+    // Se puede probar con diferentes paths de archivos txt que cumplan con la gramatica dada.
+    // string path = "ejemplo/carpeta1";
+    string path = "ejemplo";
+
 
     // Tiempo inicial
     struct timeval begin, end;

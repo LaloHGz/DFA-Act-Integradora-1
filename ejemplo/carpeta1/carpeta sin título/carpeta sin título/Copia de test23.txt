@@ -1,0 +1,3 @@
+num2 = 0 * 2 - 8 * ( 7 - 3.2) - 3 ;
+op = 432.22 + 89 - 2 ; //Comentario
+calif = ( 7 + 9 + 5 + 8 + 3 ) / 5 ; //Calificaciones

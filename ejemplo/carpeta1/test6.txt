@@ -1,0 +1,3 @@
+aux = n2 ; //En aux se guarda el valor de n2
+n2 = n1 + n2 ; //n2 es igual al valor de n1 más n2
+n1 = aux ; //n1 ahora es igual a lo que valia n2
