@@ -17,8 +17,8 @@ José Andrés Lozano Alanís A01284569
 #include "DFA.h"
 
 using namespace std;
-
-vector<DFA> dfa;
+int num = 0;
+vector<thread> readerThreads;
 
 bool B(vector<DFA> dfa, int index)
 {
@@ -249,7 +249,8 @@ bool S(vector<DFA> dfa, int index, int end)
 
 
 
-void syntaxHighligther(string archive, string number){
+void syntaxHighligther(string archive, string pth){
+    vector<DFA> dfa;
     string archivo = archive;
     ifstream fileIn(archivo);
     string line;
@@ -455,18 +456,18 @@ void syntaxHighligther(string archive, string number){
         validacion[i] = S(dfa, matrizGuardado[i][0], matrizGuardado[i][1]);
     }
 
-    for (int i = 0; i < countLine; i++)
-    {
-        cout << i + 1 << ". " << validacion[i] << endl;
-    }
+    // for (int i = 0; i < countLine; i++)
+    // {
+    //     cout << i + 1 << ". " << validacion[i] << endl;
+    // }
 
     ofstream file;
-    file.open("results/archive"+number+".html");
+    file.open("results/"+pth+".html");
     file<< "<!DOCTYPE html>\n";
     file<< "<html lang=\"es\">\n<head>";
     file<< "<meta charset=\"UTF-8\">\n";
     file<< "<title>Document</title>\n";
-    file<< "<link rel=\"stylesheet\" href=\"styles.css\">\n";
+    file<< "<link rel=\"stylesheet\" href=\"/styles.css\">\n";
     file<< "</head>\n";
     file<< "<body>\n";
 
@@ -563,45 +564,61 @@ void getTime(struct timeval begin, struct timeval end)
   printf("Tiempo de ejecucion: %.8f seconds.\n", elapsed);
 }
 
+void secuencial(string path){
+    for (const auto & entry : fs::directory_iterator(path)){
+        if (!entry.is_directory() && entry.path().extension() == ".txt")
+        {
+            syntaxHighligther(entry.path(), entry.path().stem() += "_secuencial");
+            
+        }else if(entry.is_directory()){
+            secuencial(entry.path());
+        } 
+    }
+}
+
+void parallel(string path){
+    for (const auto & entry : fs::directory_iterator(path)){
+        if (!entry.is_directory() && entry.path().extension() == ".txt")
+        {
+            thread t(syntaxHighligther, entry.path(), entry.path().stem() += "_paralelo");
+            readerThreads.push_back(move(t));
+            num++;
+        }else if(entry.is_directory()){
+            parallel(entry.path());
+        } 
+    }
+}
+
 int main()
 {
-    string path = "tests";
-    int number = 1;
+    string path = "/Users/lalohgz/Downloads/ejemplo";
 
     // Tiempo inicial
     struct timeval begin, end;
     gettimeofday(&begin, 0);
 
     // Secuencial
-    for (const auto & entry : fs::directory_iterator(path)){
-        if (!entry.is_directory())
-        {
-            syntaxHighligther(entry.path(), to_string(number));
-            number++;
-        } 
-    }
+    secuencial(path);
 
     // Tiempo final
     gettimeofday(&end, 0);
+    cout<<"SECUENCIAL"<<endl;
     getTime(begin, end);
 
 
-
-    // Tiempo inicial
+    // // Tiempo inicial
     struct timeval begin2, end2;
     gettimeofday(&begin2, 0);
-    number = 0;
     // Paralelo
-    for (const auto & entry : fs::directory_iterator(path)){
-        if (!entry.is_directory())
-        {
-            thread t1(syntaxHighligther,entry.path(), to_string(number));
-            t1.join();
-            number++;
-        } 
+    cout<<endl;
+    cout<<"PARALELO"<<endl;
+    parallel(path);
+    for (int i = 0; i < num; i++){
+        cout<<"ID del Thread "<<i<<": "<<readerThreads[i].get_id()<<endl;
+        readerThreads[i].join();
     }
 
-    // Tiempo final
+    // // Tiempo final
     gettimeofday(&end2, 0);
     getTime(begin2, end2);
 
